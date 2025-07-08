@@ -1,6 +1,17 @@
+# Ignore Python virtual environment
 venv/
+
+# Byte-compiled / cache files
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+
+# Environment
 .env
-*.pkl
-*.DS_Store
+
+# Jupyter Notebook checkpoint
+.ipynb_checkpoints
+
+# macOS and Windows system files
+.DS_Store
+Thumbs.db
