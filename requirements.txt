@@ -1,8 +1,7 @@
 streamlit
-deepface
 opencv-python
-numpy
+deepface==0.0.79
+tensorflow==2.12
+keras==2.12
 Pillow
-tensorflow==2.10
-keras==2.10
-gdown
+numpy
