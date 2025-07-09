@@ -1,5 +1,8 @@
 streamlit
-opencv-python
 deepface
-pillow
+opencv-python
 numpy
+Pillow
+tensorflow==2.10
+keras==2.10
+gdown
