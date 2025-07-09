@@ -4,4 +4,6 @@ deepface==0.0.79
 tensorflow==2.12
 keras==2.12
 Pillow
-numpy
+numpystreamlit run app.py
+mediapipe
+
