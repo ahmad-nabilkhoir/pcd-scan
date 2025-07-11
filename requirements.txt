@@ -1,9 +1,7 @@
-streamlit
-opencv-python
+streamlit==1.28.0
+opencv-python-headless==4.5.5.64
 deepface==0.0.79
-tensorflow==2.12
-keras==2.12
+tensorflow-cpu==2.11.0
 Pillow
-numpystreamlit run app.py
-mediapipe
-
+numpy
+mediapipe==0.10.3
