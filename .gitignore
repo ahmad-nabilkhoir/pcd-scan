@@ -3,6 +3,7 @@ venv/
 
 # Byte-compiled / cache files
 venv/
+venv310/
 __pycache__/
 *.pyc
 
