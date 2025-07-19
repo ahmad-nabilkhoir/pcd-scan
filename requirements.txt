@@ -1,4 +1,5 @@
 streamlit
+streamlit-webrtc
 opencv-python
 numpy
 pillow
@@ -6,4 +7,3 @@ matplotlib
 tensorflow
 deepface
 mediapipe
-streamlit-webrtc

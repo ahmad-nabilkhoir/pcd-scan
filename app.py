@@ -5,9 +5,14 @@ from deepface import DeepFace
 from PIL import Image
 import os
 
+
+# Tambahan untuk webcam live
+from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
+import av
+
 # Konfigurasi
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
-st.set_page_config(page_title="Deteksi Manual", layout="centered")
+st.set_page_config(page_title="Deteksi Wajah Manual", layout="centered")
 st.title("📸 Deteksi Wajah Manual")
 
 # Emoji emosi
@@ -21,17 +26,38 @@ emoji_map = {
     "neutral": "😐"
 }
 
-# Upload atau ambil gambar dari kamera
-img_file = st.camera_input("🎥 Ambil Foto Wajah")
+# === Webcam dengan Streamlit WebRTC === #
+class VideoTransformer(VideoTransformerBase):
+    def __init__(self):
+        self.frame = None
 
-if img_file is not None:
-    # Konversi ke array
-    image = Image.open(img_file)
-    img_array = np.array(image)
+    def transform(self, frame):
+        self.frame = frame.to_ndarray(format="bgr24")
+        return frame.to_ndarray(format="bgr24")
 
-    st.image(img_array, caption="📷 Gambar dari Kamera", use_container_width=True)
+# Tampilkan kamera
+RTC_CONFIGURATION = {
+    "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+}
 
-    if st.button("📊 Analisis Wajah"):
+ctx = webrtc_streamer(
+    key="camera",
+    video_transformer_factory=VideoTransformer,
+    rtc_configuration=RTC_CONFIGURATION
+)
+
+
+# Jika kamera aktif dan frame tersedia
+if ctx.video_transformer and ctx.video_transformer.frame is not None:
+    st.markdown("✅ Kamera aktif. Klik tombol di bawah untuk mengambil snapshot dan analisis.")
+
+    if st.button("📸 Ambil & Analisis Wajah"):
+        frame = ctx.video_transformer.frame
+        image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        img_array = np.array(image)
+
+        st.image(img_array, caption="📷 Gambar dari Kamera", use_container_width=True)
+
         with st.spinner("🔍 Menganalisis wajah..."):
             try:
                 result = DeepFace.analyze(
@@ -50,7 +76,7 @@ if img_file is not None:
                 gender_label = "Laki-laki" if predicted_gender == "Man" else "Perempuan"
                 emoji = emoji_map.get(emotion.lower(), "❓")
 
-                # Tampilkan
+                # Tampilkan hasil
                 st.success("✅ Wajah berhasil dianalisis!")
                 st.markdown(f"**🧓 Umur:** {age}")
                 st.markdown(f"**🚻 Gender:** {gender_label} ({gender_scores[predicted_gender]:.2f}%)")
@@ -59,4 +85,4 @@ if img_file is not None:
             except Exception as e:
                 st.error(f"❌ Deteksi gagal: {e}")
 else:
-    st.info("📌 Silakan ambil gambar terlebih dahulu menggunakan kamera di atas.")
+    st.info("📌 Nyalakan kamera dan izinkan akses untuk melanjutkan deteksi.")
