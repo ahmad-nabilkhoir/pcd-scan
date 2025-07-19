@@ -1,7 +1,8 @@
-streamlit==1.28.0
-opencv-python-headless==4.5.5.64
-deepface==0.0.79
-tensorflow==2.11.0
-Pillow
+streamlit
+opencv-python
 numpy
-mediapipe==0.10.3
+pillow
+matplotlib
+tensorflow
+deepface
+mediapipe
